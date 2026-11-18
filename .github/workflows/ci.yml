@@ -30,6 +30,4 @@ jobs:
       - name: test:unit
         run: npm run test:unit
 
-
-
       # TODO: tres steps distintos: lint, format:check y test:unit

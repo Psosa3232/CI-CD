@@ -1,6 +1,4 @@
-
 name: Hola Actions
-
 
 on:
   push:
@@ -17,4 +15,3 @@ jobs:
 
       - name: Mostrar fecha
         run: date
-
