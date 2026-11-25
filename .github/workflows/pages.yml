@@ -3,7 +3,9 @@ name: Documentacion Pages
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - feature/pages
   workflow_dispatch:
 
 permissions:
