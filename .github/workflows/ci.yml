@@ -24,9 +24,9 @@ jobs:
           cache: npm
 
       - name: Lint
-        run: npm ci
+        run: npm ci:lint
       - name: format:check
-        run: npm run format
+        run: npm run format:check
       - name: test:unit
         run: npm run test:unit
 
