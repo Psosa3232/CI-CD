@@ -14,3 +14,11 @@ exit 1 indica que el comando ha cometido un error.
 ### 3. Que he añadido en la parte 4 en la nueva rama
 
 service: 'tasks-api'
+
+
+### 4. ¿En qué se diferencia un push en tu rama de fusionar a main? ¿Por qué es mejor evitar los cambios directos en producción?
+
+Un push sube los cambios a tu propia rama sin modificar main, mientras que un merge incorpora esos cambios a la rama principal.
+
+Es mejor evitar cambios directos en producción porque pueden
+introducir errores; las Pull Requests permiten revisar el código y ejecutar pruebas antes de integrarlo.

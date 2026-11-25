@@ -1,3 +1,4 @@
+
 name: CI
 
 on:
@@ -17,17 +18,42 @@ jobs:
     steps:
       - name: Descargar el codigo
         uses: actions/checkout@v4
+
       - name: Preparar Node
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: Lint
-        run: npm ci:lint
+      - name: Instalar dependencias
+        run: npm ci
+
       - name: format:check
         run: npm run format:check
+
       - name: test:unit
         run: npm run test:unit
 
-      # TODO: tres steps distintos: lint, format:check y test:unit
+  integration:
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: warn
