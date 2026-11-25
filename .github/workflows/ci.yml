@@ -26,7 +26,7 @@ jobs:
       - name: Lint
         run: npm ci
       - name: format:check
-        run: npm run format:check
+        run: npm run format
       - name: test:unit
         run: npm run test:unit
 
