@@ -1,0 +1,74 @@
+
+name: Documentacion Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # JOB 1: Construcción de documentación
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Descargar el código
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Instalar Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Instalar dependencias
+      - name: Install dependencies
+        run: npm ci
+
+      # Validar especificación
+      - name: Validate OpenAPI
+        run: npm run openapi:lint
+
+      # Generar la documentación
+      - name: Build documentation
+        run: npm run docs:build
+
+      # Montar la carpeta en site/
+      - name: Prepare Pages directory
+        run: |
+          mkdir -p site/api
+          cp site-src/index.html site/index.html
+          cp dist/docs/index.html site/api/index.html
+
+      # Subir el site como artefacto de Pages
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  # JOB 2: Despliegue en GitHub Pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
